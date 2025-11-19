@@ -51,6 +51,7 @@ Follow these steps to deploy the pipeline in your own AWS account.
 Create two S3 buckets with globally unique names:
 * `handsonfinallanding`: This is where you will upload your raw data.
 * `handsonfinalprocessed`: This is where the processed data and query results will be stored.
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 13 32 PM (2)" src="https://github.com/user-attachments/assets/3d5121b8-1de4-4221-ab1a-c46cac543d59" />
 
 ### 3. Create IAM Role for AWS Glue
 Your Glue job needs permission to read from and write to S3.
@@ -61,6 +62,7 @@ Your Glue job needs permission to read from and write to S3.
 4.  Attach the `AWSGlueServiceRole` managed policy.
 5.  Attach the `AmazonS3FullAccess` policy (for this demo) or a more restrictive policy that only grants access to your two buckets.
 6.  Name the role `AWSGlueServiceRole-Reviews` and create it.
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 14 43 PM (2)" src="https://github.com/user-attachments/assets/abddb9b5-a810-4da7-b639-5a2e4d0612bd" />
 
 ### 4. Create the AWS Glue ETL Job
 1.  Go to the **AWS Glue** service.
@@ -71,6 +73,8 @@ Your Glue job needs permission to read from and write to S3.
 6.  Set the **Name** to `process_reviews_job`.
 7.  Select the `AWSGlueServiceRole-Reviews` **IAM Role** you created in the previous step.
 8.  Save the job.
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 15 39 PM (2)" src="https://github.com/user-attachments/assets/3ab7d717-779b-4f19-9118-a6b6efa56e0a" />
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 16 09 PM (2)" src="https://github.com/user-attachments/assets/926e3ced-073b-4e50-8f6f-4e393c34077a" />
 
 > **Note:** The script is already configured to use the `handsonfinallanding` and `handsonfinalprocessed` buckets.
 
@@ -83,9 +87,11 @@ This function will start the Glue job when a file is uploaded.
 4.  Set the **Runtime** to **Python 3.10** (or any modern Python runtime).
 5.  **Permissions:** Under "Change default execution role," select **Create a new role with basic Lambda permissions**. This role will be automatically named.
 6.  Create the function.
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 17 33 PM (2)" src="https://github.com/user-attachments/assets/47705b22-f3f5-4c87-8630-dfeebc71c128" />
 
 #### 5a. Add Lambda Code
 Paste the contents of `src/lambda_function.py` into the code editor. Make sure the `GLUE_JOB_NAME` variable matches the name of your Glue job (`process_reviews_job`).
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 18 22 PM (2)" src="https://github.com/user-attachments/assets/58233466-e832-4c7a-82da-41d6313b84d3" />
 
 #### 5b. Add Lambda Permissions
 The new Lambda role needs permission to start a Glue job.
@@ -105,6 +111,7 @@ The new Lambda role needs permission to start a Glue job.
     }
     ```
 4.  Name the policy `Allow-Glue-StartJobRun` and save it.
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 19 16 PM (2)" src="https://github.com/user-attachments/assets/e0d9c221-453b-46ac-9a21-9fa85fb3d4a6" />
 
 #### 5c. Add the S3 Trigger
 1.  Go back to your Lambda function's main page.
@@ -113,6 +120,7 @@ The new Lambda role needs permission to start a Glue job.
 4.  Select your `handsonfinallanding` bucket.
 5.  Set the **Event type** to `s3:ObjectCreated:*` (or "All object create events").
 6.  Acknowledge the recursive invocation warning and click **Add**.
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 20 33 PM (2)" src="https://github.com/user-attachments/assets/59509b8d-f5be-4a63-b8ec-034ce8ad2051" />
 
 ---
 
@@ -124,6 +132,7 @@ Your pipeline is now fully deployed and automated!
 2.  Upload `reviews.csv` to the root of your `handsonfinallanding` S3 bucket.
 3.  This will trigger the Lambda, which in turn starts the Glue job.
 4.  You can monitor the job's progress in the **AWS Glue** console under the **Monitoring** tab.
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 21 10 PM (2)" src="https://github.com/user-attachments/assets/4121aa8b-ef52-4135-b55a-8dc74feb19c6" />
 
 ---
 
@@ -134,8 +143,10 @@ After the job (which may take 2-3 minutes to run), navigate to your `handsonfina
 * `s3://handsonfinalprocessed/Athena Results/daily_review_counts/`
 * `s3://handsonfinalprocessed/Athena Results/top_5_customers/`
 * `s3://handsonfinalprocessed/Athena Results/rating_distribution/`
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 23 34 PM (2)" src="https://github.com/user-attachments/assets/c6f60e54-3212-426d-ac83-e802c8382ae8" />
 
 You will also find the complete, cleaned dataset in `s3://handsonfinalprocessed/processed-data/`.
+<img width="1920" height="1080" alt="Screenshot 2025-11-18 at 8 23 52 PM (2)" src="https://github.com/user-attachments/assets/94ca7cdf-c023-4447-8caa-a270657267d1" />
 
 ---
 ## 🧹 Cleanup
