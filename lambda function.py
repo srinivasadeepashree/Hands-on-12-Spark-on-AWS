@@ -1,6 +1,5 @@
 import boto3
 
-# Replace with the name of your Glue job
 GLUE_JOB_NAME = "process_reviews_job"
 
 def lambda_handler(event, context):
